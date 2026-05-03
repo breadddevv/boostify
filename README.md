@@ -8,5 +8,7 @@
     <img src="https://img.shields.io/github/forks/teamboostify/boostify?style=flat-square&color=FF47B5" />
     <img src="https://img.shields.io/github/checks-status/teamboostify/boostify/main?style=flat-square&color=FF47B5" />
 </div>
+---
+
 > [!NOTE]
 > **Boostify** is a work-in-progress project, while our team ensures everything in our platform works flawlessly, you're more than welcomed to make an issue if you find an issue
