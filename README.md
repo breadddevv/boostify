@@ -9,4 +9,4 @@
 </div>
 
 > [!NOTE]
-> **Boostify** is a work-in-progress project, while our team ensures everything in our platform works flawlessly, you're more than welcomed to make an issue if you find an issue~
+> **Boostify** is a work-in-progress project. While our team ensures everything in our platform works flawlessly, you're more than welcome to make an issue if you find an issue.
