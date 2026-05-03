@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Guild {
+  id          String    @id @default(cuid())
+  discordId   String    @unique
+  name        String
+  iconUrl     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  boosters    Booster[]
+}
+
+model Booster {
+  id          String      @id @default(cuid())
+  userId      String
+  guildId     String
+  guild       Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  boostedAt   DateTime    @default(now())
+  boostCounts Int         @default(1) 
+  expiresAt   DateTime?
+  active      Boolean     @default(true)
+  customRole  CustomRole?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([userId, guildId])
+  @@index([guildId])
+  @@index([userId])
+}
+
+model CustomRole {
+  id            String    @id @default(cuid())
+  boosterId     String    @unique
+  booster       Booster   @relation(fields: [boosterId], references: [id], onDelete: Cascade)
+  discordRoleId String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

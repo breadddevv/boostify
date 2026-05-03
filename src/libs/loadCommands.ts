@@ -49,6 +49,10 @@ export async function loadCommands(
   const rest = new REST().setToken(token);
 
   await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+    body: [],
+  });
+
+  await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
     body: commandData,
   });
 }

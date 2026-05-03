@@ -62,4 +62,8 @@ for (const file of eventFiles) {
 
 await loadCommands(client, config.clientId, config.guildId, config.botToken)
 
-client.login(config.botToken);
+try {
+  client.login(config.botToken);
+} catch (err) {
+  console.log(err)
+}
