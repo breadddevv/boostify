@@ -2,9 +2,9 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { Command } from "../libs/loadCommands";
-import { getBooster } from "../services/boosterService";
-import { createPrivateChannel, deletePrivateChannel } from "../services/channelService";
+import { Command } from "../libs/loadCommands.js";
+import { getBooster } from "../services/boosterService.js";
+import { createPrivateChannel, deletePrivateChannel } from "../services/channelService.js";
 
 const channelCommand: Command = {
   data: new SlashCommandBuilder()

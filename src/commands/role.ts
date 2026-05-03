@@ -4,13 +4,13 @@ import {
   PermissionFlagsBits,
   ColorResolvable,
 } from "discord.js";
-import { Command } from "../libs/loadCommands";
-import { getBooster } from "../services/boosterService";
+import { Command } from "../libs/loadCommands.js";
+import { getBooster } from "../services/boosterService.js";
 import {
   createCustomRole,
   updateCustomRole,
   deleteCustomRole,
-} from "../services/roleService";
+} from "../services/roleService.js";
 
 const roleCommand: Command = {
   data: new SlashCommandBuilder()

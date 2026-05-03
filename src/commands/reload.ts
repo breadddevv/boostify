@@ -5,9 +5,9 @@ import {
   Client,
   Collection,
 } from "discord.js";
-import { Command } from "../libs/loadCommands";
-import { loadCommands } from "../libs/loadCommands";
-import { loadVariables } from "../libs/loadVariables";
+import { Command } from "../libs/loadCommands.js";
+import { loadCommands } from "../libs/loadCommands.js";
+import { loadVariables } from "../libs/loadVariables.js";
 
 const reloadCommand: Command = {
   data: new SlashCommandBuilder()

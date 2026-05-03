@@ -5,8 +5,8 @@ import {
   ColorResolvable,
   PermissionFlagsBits,
 } from "discord.js";
-import { Config } from "../libs/loadVariables";
-import { setCustomRole, getBooster, BoosterRecord } from "./boosterService";
+import { Config } from "../libs/loadVariables.js";
+import { setCustomRole, getBooster, BoosterRecord } from "./boosterService.js";
 
 export interface BoostLevelRole {
   minBoosts: number;

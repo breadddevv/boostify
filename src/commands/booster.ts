@@ -4,7 +4,7 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "../libs/loadCommands";
+import { Command } from "../libs/loadCommands.js";
 import {
   getBooster,
   addBoostCount,
@@ -13,7 +13,7 @@ import {
   getActiveBoosters,
   getTotalBoosts,
   registerBoost,
-} from "../services/boosterService";
+} from "../services/boosterService.js";
 
 const boosterCommand: Command = {
   data: new SlashCommandBuilder()

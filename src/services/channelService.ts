@@ -5,7 +5,7 @@ import {
   PermissionFlagsBits,
   TextChannel,
 } from "discord.js";
-import { getBooster, setPrivateChannel } from "./boosterService";
+import { getBooster, setPrivateChannel } from "./boosterService.js";
 
 export async function createPrivateChannel(
   guild: Guild,

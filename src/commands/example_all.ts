@@ -6,7 +6,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
 } from "discord.js";
-import { Command } from "../libs/loadCommands";
+import { Command } from "../libs/loadCommands.js";
 
 const exampleAllCommand: Command = {
   data: new SlashCommandBuilder()
