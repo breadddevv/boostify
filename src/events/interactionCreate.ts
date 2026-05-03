@@ -3,23 +3,6 @@ import { Events, Interaction, InteractionType, Client } from "discord.js";
 export default {
   name: Events.InteractionCreate,
   async execute(client: Client & { commands: any }, interaction: Interaction) {
-    if (interaction.isAutocomplete()) {
-      const command = client.commands.get(interaction.commandName);
-
-      if (!command?.autocomplete) return;
-
-      try {
-        await command.autocomplete(interaction);
-      } catch (err) {
-        console.error(err);
-        try {
-          await interaction.respond([]);
-        } catch {}
-      }
-
-      return;
-    }
-
     if (
       interaction.type !== InteractionType.ApplicationCommand ||
       !interaction.isChatInputCommand()
