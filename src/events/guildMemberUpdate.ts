@@ -1,31 +1,21 @@
-import { GuildMember, TextChannel, EmbedBuilder } from "discord.js";
-import { Config } from "../libs/loadVariables";
-import {
-  getBooster,
-  registerBoost,
-  removeBoost,
-} from "../services/boosterService";
-import {
-  assignBoosterRole,
-  removeBoosterRole,
-  assignLevelRoles,
-  removeAllLevelRoles,
-  deleteCustomRole,
-} from "../services/roleService";
-import { deletePrivateChannel } from "../services/channelService";
+import { EmbedBuilder, Events, GuildMember, TextChannel } from "discord.js";
+import { Config } from "../libs/loadVariables.js";
+import { getBooster, registerBoost, removeBoost } from "../services/boosterService.js";
+import { assignBoosterRole, removeBoosterRole, assignLevelRoles, removeAllLevelRoles, deleteCustomRole } from "../services/roleService.js";
+import { deletePrivateChannel } from "../services/channelService.js";
 
-export async function handleGuildMemberUpdate(
-  oldMember: GuildMember,
-  newMember: GuildMember,
-  config: Config
-): Promise<void> {
-  const wasBoostingBefore = oldMember.premiumSince !== null;
-  const isBoostingNow = newMember.premiumSince !== null;
+export default {
+  name: Events.GuildMemberUpdate,
+  once: false,
+  async execute(oldMember: GuildMember, newMember: GuildMember, config: Config) {
+    const wasBoostingBefore = oldMember.premiumSince !== null;
+    const isBoostingNow = newMember.premiumSince !== null;
 
-  if (!wasBoostingBefore && isBoostingNow) {
-    await onBoostStart(newMember, config);
-  } else if (wasBoostingBefore && !isBoostingNow) {
-    await onBoostEnd(newMember, config);
+    if (!wasBoostingBefore && isBoostingNow) {
+      await onBoostStart(newMember, config);
+    } else if (wasBoostingBefore && !isBoostingNow) {
+      await onBoostEnd(newMember, config);
+    }
   }
 }
 
