@@ -2,23 +2,19 @@ import {
   Client,
   GatewayIntentBits,
   Partials,
-  Collection,
-  Events,
-  GuildMember,
-  ChatInputCommandInteraction,
-  ActivityType,
+  Collection
 } from "discord.js";
-import * as dotenv from "dotenv";
+import * as dotenv from "dotenv/config";
 import { loadVariables } from "./libs/loadVariables.js";
 import { Command, loadCommands } from "./libs/loadCommands.js";
 import path from "path";
 import fs from 'fs';
 import { fileURLToPath, pathToFileURL } from "url";
-import chalk from "chalk";
+import { logger } from "./libs/logger.js";
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-dotenv.config();
+dotenv;
 
 const config = loadVariables();
 
@@ -41,9 +37,11 @@ for (const file of commandFiles) {
   const command = (await import(pathToFileURL(filePath).href)).default;
   if (command != undefined && Object.keys(command).length !== 0) {
     client.commands.set(command.data.name, command);
-    console.log(chalk.green(`✓ Loaded command ${file.replace(/\.[jt]s$/, '')}`));
+    // console.log(chalk.green(`✓ Loaded command ${file.replace(/\.[jt]s$/, '')}`));
+    logger.startup(`Loaded command ${file.replace(/\.[jt]s$/, '')}`);
   } else {
-    console.log(chalk.yellow(`Couldn't load command ${file.replace(/\.[jt]s$/, '')}`));
+    // console.log(chalk.yellow(`Couldn't load command ${file.replace(/\.[jt]s$/, '')}`));
+    logger.warn(`Couldn't load command ${file.replace(/\.[jt]s$/, '')}`);
   }
 }
 
@@ -58,7 +56,8 @@ for (const file of eventFiles) {
   } else {
     client.on(name, (...args) => execute(client, ...args));
   }
-  console.log(chalk.green(`✓ Loaded event ${file.replace(/\.[jt]s$/, '')}`));
+  // console.log(chalk.green(`✓ Loaded event ${file.replace(/\.[jt]s$/, '')}`));
+  logger.startup(`Loaded event ${file.replace(/\.[jt]s$/, '')}`);
 }
 
 await loadCommands(client, config.clientId, config.guildId, config.botToken)
