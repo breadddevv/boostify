@@ -7,6 +7,8 @@ import {
   GuildMember,
   ChatInputCommandInteraction,
   ActivityType,
+  MessageFlags,
+  InteractionReplyOptions,
 } from "discord.js";
 import * as dotenv from "dotenv";
 import { loadVariables } from "./libs/loadVariables";
@@ -65,7 +67,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
   } catch (error) {
     console.error(`Error executing command ${interaction.commandName}:`, error);
 
-    const payload = { content: "An error occurred.", ephemeral: true };
+    const payload = {
+      content: "An error occurred.",
+      flags: MessageFlags.Ephemeral,
+    } as const;
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp(payload).catch(() => null);
     } else {
