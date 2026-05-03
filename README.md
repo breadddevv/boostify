@@ -16,7 +16,4 @@
 ### Overview
 
 > [!NOTE]
-> **Boostify** is currently a work-in-progress project.
-> Our team is actively improving the platform to ensure everything runs smoothly.
->
-> If you encounter any issues, feel free to open an issue — contributions are welcome!
+> **Boostify** is a work-in-progress project. While our team ensures everything in our platform works flawlessly, you're more than welcome to make an issue if you find an issue.
