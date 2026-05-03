@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import * as fs from "fs";
 import * as path from "path";
-import { pathToFileURL } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 
 export interface Command {
   data:
@@ -18,6 +18,8 @@ export interface Command {
     | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
   execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export async function loadCommands(
   client: Client & { commands?: Collection<string, Command> },
@@ -36,8 +38,7 @@ export async function loadCommands(
 
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const commandModule = (await import(pathToFileURL(filePath).href)).default;
-    const command = commandModule.default;
+    const command = (await import(pathToFileURL(filePath).href)).default;
 
     if (!command?.data || !command?.execute) continue;
 

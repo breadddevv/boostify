@@ -9,9 +9,14 @@ import {
   ActivityType,
 } from "discord.js";
 import * as dotenv from "dotenv";
-import { loadVariables } from "./libs/loadVariables";
-import { loadCommands, Command } from "./libs/loadCommands";
-import { handleGuildMemberUpdate } from "./events/guildMemberUpdate";
+import { loadVariables } from "./libs/loadVariables.js";
+import { Command, loadCommands } from "./libs/loadCommands.js";
+import path from "path";
+import fs from 'fs';
+import { fileURLToPath, pathToFileURL } from "url";
+import chalk from "chalk";
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 dotenv.config();
 
@@ -26,55 +31,36 @@ const client = new Client({
   partials: [Partials.GuildMember],
 }) as Client & { commands?: Collection<string, Command> };
 
-client.once(Events.ClientReady, async (readyClient) => {
-  console.log(`Logged in as ${readyClient.user.tag}`);
+client.commands = new Collection();
 
-  await loadCommands(client, config.clientId, config.guildId, config.botToken);
-  console.log("Commands loaded and registered.");
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js') || file.endsWith('.ts'));
 
-  readyClient.user.setPresence({
-    activities: [{ name: "people boost!", type: ActivityType.Watching }],
-    status: "online",
-  });
-});
-
-client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
-  if (oldMember.partial) {
-    try {
-      await oldMember.fetch();
-    } catch {
-      return;
-    }
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = (await import(pathToFileURL(filePath).href)).default;
+  if (command != undefined && Object.keys(command).length !== 0) {
+    client.commands.set(command.data.name, command);
+    console.log(chalk.green(`✓ Loaded command ${file.replace(/\.[jt]s$/, '')}`));
+  } else {
+    console.log(chalk.yellow(`Couldn't load command ${file.replace(/\.[jt]s$/, '')}`));
   }
+}
 
-  await handleGuildMemberUpdate(
-    oldMember as GuildMember,
-    newMember as GuildMember,
-    config
-  ).catch((err: unknown) => console.error("guildMemberUpdate error:", err));
-});
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith('.js') || file.endsWith('.ts'));
 
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  const command = client.commands?.get(interaction.commandName);
-  if (!command) return;
-
-  try {
-    await command.execute(interaction as ChatInputCommandInteraction);
-  } catch (error) {
-    console.error(`Error executing command ${interaction.commandName}:`, error);
-
-    const payload = { content: "An error occurred.", ephemeral: true };
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp(payload).catch(() => null);
-    } else {
-      await interaction.reply(payload).catch(() => null);
-    }
+for (const file of eventFiles) {
+  const filePath = path.join(eventsPath, file);
+  const { once, name, execute } = (await import(pathToFileURL(filePath).href)).default;
+  if (once) {
+    client.once(name, (...args) => execute(client, ...args));
+  } else {
+    client.on(name, (...args) => execute(client, ...args));
   }
-});
+  console.log(chalk.green(`✓ Loaded event ${file.replace(/\.[jt]s$/, '')}`));
+}
 
-client.login(config.botToken).catch((err: unknown) => {
-  console.error("Failed to log in:", err);
-  process.exit(1);
-});
+await loadCommands(client, config.clientId, config.guildId, config.botToken)
+
+client.login(config.botToken);
