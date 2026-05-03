@@ -3,10 +3,12 @@ import {
   GuildMember,
   Role,
   ColorResolvable,
-  PermissionFlagsBits,
 } from "discord.js";
 import { Config } from "../libs/loadVariables.js";
-import { setCustomRole, getBooster, BoosterRecord } from "./boosterService.js";
+import {
+  setCustomRole,
+  getCustomRole,
+} from "./boosterService.js";
 
 export interface BoostLevelRole {
   minBoosts: number;
@@ -24,10 +26,8 @@ export async function assignBoosterRole(
   config: Config
 ): Promise<void> {
   if (member.roles.cache.has(config.boosterRoleId)) return;
-
   const role = member.guild.roles.cache.get(config.boosterRoleId);
   if (!role) return;
-
   await member.roles.add(role);
 }
 
@@ -36,10 +36,8 @@ export async function removeBoosterRole(
   config: Config
 ): Promise<void> {
   if (!member.roles.cache.has(config.boosterRoleId)) return;
-
   const role = member.guild.roles.cache.get(config.boosterRoleId);
   if (!role) return;
-
   await member.roles.remove(role);
 }
 
@@ -49,13 +47,13 @@ export async function assignLevelRoles(
 ): Promise<void> {
   if (BOOST_LEVEL_ROLES.length === 0) return;
 
-  const eligibleRoleIds = BOOST_LEVEL_ROLES.filter(
-    (lr) => boostCount >= lr.minBoosts
-  ).map((lr) => lr.roleId);
+  const eligibleRoleIds = BOOST_LEVEL_ROLES
+    .filter((lr) => boostCount >= lr.minBoosts)
+    .map((lr) => lr.roleId);
 
-  const ineligibleRoleIds = BOOST_LEVEL_ROLES.filter(
-    (lr) => boostCount < lr.minBoosts
-  ).map((lr) => lr.roleId);
+  const ineligibleRoleIds = BOOST_LEVEL_ROLES
+    .filter((lr) => boostCount < lr.minBoosts)
+    .map((lr) => lr.roleId);
 
   for (const roleId of eligibleRoleIds) {
     if (!member.roles.cache.has(roleId)) {
@@ -101,7 +99,8 @@ export async function createCustomRole(
   });
 
   await member.roles.add(role);
-  setCustomRole(member.id, role.id);
+  await setCustomRole(member.id, guild.id, role.id);
+
   return role;
 }
 
@@ -109,15 +108,13 @@ export async function deleteCustomRole(
   guild: Guild,
   userId: string
 ): Promise<void> {
-  const record: BoosterRecord | null = getBooster(userId);
-  if (!record?.customRoleId) return;
+  const customRole = await getCustomRole(userId, guild.id);
+  if (!customRole) return;
 
-  const role = guild.roles.cache.get(record.customRoleId);
-  if (role) {
-    await role.delete();
-  }
+  const role = guild.roles.cache.get(customRole.discordRoleId);
+  if (role) await role.delete();
 
-  setCustomRole(userId, null);
+  await setCustomRole(userId, guild.id, null);
 }
 
 export async function updateCustomRole(
@@ -126,10 +123,10 @@ export async function updateCustomRole(
   name?: string,
   color?: ColorResolvable
 ): Promise<Role | null> {
-  const record: BoosterRecord | null = getBooster(userId);
-  if (!record?.customRoleId) return null;
+  const customRole = await getCustomRole(userId, guild.id);
+  if (!customRole) return null;
 
-  const role = guild.roles.cache.get(record.customRoleId);
+  const role = guild.roles.cache.get(customRole.discordRoleId);
   if (!role) return null;
 
   await role.edit({

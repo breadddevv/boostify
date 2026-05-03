@@ -43,9 +43,9 @@ const roleCommand: Command = {
     ),
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
-    const record = getBooster(interaction.user.id);
+    const record = await getBooster(interaction.user.id, interaction);
 
-    if (!record?.boosting) {
+    if (!record?.data?.active) {
       await interaction.reply({
         content: "You must be an active booster to use this command.",
         ephemeral: true,
@@ -58,7 +58,7 @@ const roleCommand: Command = {
     const member = await guild.members.fetch(interaction.user.id);
 
     if (sub === "create") {
-      if (record.customRoleId) {
+      if (record.data.customRole) {
         await interaction.reply({
           content: "You already have a custom role. Use /role edit to modify it.",
           ephemeral: true,
@@ -86,7 +86,7 @@ const roleCommand: Command = {
     }
 
     if (sub === "edit") {
-      if (!record.customRoleId) {
+      if (!record.data.customRole?.discordRoleId) {
         await interaction.reply({
           content: "You do not have a custom role. Use /role create first.",
           ephemeral: true,
@@ -118,7 +118,7 @@ const roleCommand: Command = {
     }
 
     if (sub === "delete") {
-      if (!record.customRoleId) {
+      if (!record.data.customRole?.discordRoleId) {
         await interaction.reply({
           content: "You do not have a custom role.",
           ephemeral: true,
