@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import * as fs from "fs";
 import * as path from "path";
+import { pathToFileURL } from "url";
 
 export interface Command {
   data:
@@ -35,7 +36,7 @@ export async function loadCommands(
 
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const commandModule = await import(filePath) as { default: Command };
+    const commandModule = (await import(pathToFileURL(filePath).href)).default;
     const command = commandModule.default;
 
     if (!command?.data || !command?.execute) continue;
