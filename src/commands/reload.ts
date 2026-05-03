@@ -1,0 +1,35 @@
+import {
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+  PermissionFlagsBits,
+  Client,
+  Collection,
+} from "discord.js";
+import { Command } from "../libs/loadCommands";
+import { loadCommands } from "../libs/loadCommands";
+import { loadVariables } from "../libs/loadVariables";
+
+const reloadCommand: Command = {
+  data: new SlashCommandBuilder()
+    .setName("reload")
+    .setDescription("Reload all slash commands")
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+    await interaction.deferReply({ ephemeral: true });
+
+    try {
+      const config = loadVariables();
+      const client = interaction.client as Client & { commands?: Collection<string, Command> };
+
+      await loadCommands(client, config.clientId, config.guildId, config.botToken);
+
+      await interaction.editReply("Commands reloaded successfully.");
+    } catch (error) {
+      console.error("Reload failed:", error);
+      await interaction.editReply("Failed to reload commands.");
+    }
+  },
+};
+
+export default reloadCommand;
