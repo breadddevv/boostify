@@ -47,7 +47,7 @@ const reloadCommand: Command = {
 
     const terms = new ButtonBuilder()
       .setStyle(ButtonStyle.Link)
-      .setLabel("Terms of Policy")
+      .setLabel("Terms of Service")
       .setURL("https://boostify.breaddevv.cc/terms");
 
     const privacy = new ButtonBuilder()
