@@ -19,7 +19,7 @@ export const logger = {
     console.log(`${timestamp()} ${chalk.red("ERROR")} ${message}`, ...args);
   },
   bot: (message: string, ...args: any[]) => {
-    console.log(`${timestamp()} ${chalk.cyan("BOT")} ${message}`, ...args);
+    console.log(`${timestamp()} ${chalk.cyan.bold("BOT")} ${message}`, ...args);
   },
   fatal: (message: string, ...args: any[]) => {
     console.log(`${timestamp()} ${chalk.red.bold("FATAL")} ${message}`, ...args);

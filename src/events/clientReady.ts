@@ -7,6 +7,6 @@ export default {
     execute(client:Client) {
         if (!client.user) return;
         // console.log(chalk.white(`Ready! Logged in as ${client.user.tag}`))
-        logger.startup(`Ready! Logged in as ${client.user.tag}`)
+        logger.bot(`Ready! Logged in as ${client.user.tag}`)
     }
 }
