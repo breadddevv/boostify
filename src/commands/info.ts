@@ -24,22 +24,29 @@ const reloadCommand: Command = {
       "https://api.github.com/repos/teamboostify/boostify/contributors"
     );
 
-    const embed = new EmbedBuilder()
-      .setColor(16712630)
-      .setThumbnail(interaction.client.user.displayAvatarURL({ size: 2048 }))
-      .setTitle("Bot information")
-      .setDescription(
-        "Boostify is a Discord bot designed to help you manage your server boosts."
-      )
-      .setFields({
-        name: "Developers",
-        value: info.data
-          .map((user) => `[${user.login}](${user.html_url})`)
-          .join("\n"),
-        inline: true,
-      })
-      .setTimestamp();
-
+const embed = new EmbedBuilder()
+  .setColor(16712630)
+  .setThumbnail(interaction.client.user.displayAvatarURL({ size: 2048 }))
+  .setTitle("Bot information")
+  .setDescription(
+    "Boostify is a Discord bot designed to help you manage your server boosts."
+  )
+    .addFields(
+    {
+      name: "Developers",
+      value: info.data
+        .map((user) => `[${user.login}](${user.html_url})`)
+        .join("\n"),
+      inline: true,
+    },
+    {
+      name: "How was I made?",
+      value: "I was built using TypeScript and discord.js.",
+      inline: false,
+    }
+  )
+  .setTimestamp();
+    
     const website = new ButtonBuilder()
       .setStyle(ButtonStyle.Link)
       .setLabel("Our Website")
