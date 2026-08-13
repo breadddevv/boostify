@@ -15,6 +15,7 @@ export default {
             const privacy = new ButtonBuilder().setLabel('Privacy Policy').setURL('https://boostify.breaddevv.cc/privacy').setStyle(ButtonStyle.Link);
             const github = new ButtonBuilder().setLabel('Our Repository').setURL('https://boostify.breaddevv.cc/github').setStyle(ButtonStyle.Link);
             const topgg = new ButtonBuilder().setLabel('Support Us On Top.gg!').setURL('https://top.gg/bot/1453802179789066442').setStyle(ButtonStyle.Link);
+            const buyMeACoffee = new ButtonBuilder().setLabel("Buy Me A Coffee!").setURL("https://buymeacoffee.com/breaddevv").setStyle(ButtonStyle.Link);
 
             const container = new ContainerBuilder().addSectionComponents(comp =>
                 comp
@@ -28,7 +29,7 @@ export default {
                     .setThumbnailAccessory(accessory => accessory.setURL(avatarUrl))
             )
             .addTextDisplayComponents(text => text.setContent(`-# You're receiving this text because you/other member added me to the server **${guild.name}** — In which you're the owner!`))
-            .addActionRowComponents(row => row.addComponents(termsBtn, privacy, github, topgg))
+            .addActionRowComponents(row => row.addComponents(termsBtn, privacy, github, topgg, buyMeACoffee))
             .setAccentColor(SystemColors.main);
 
             await owner.send({
