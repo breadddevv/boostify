@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "A discord server boosting management bot",
   "main": "dist/index.js",
+  "packageManager": "bun",
   "type": "module",
   "scripts": {
     "build": "tsc",
