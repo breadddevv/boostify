@@ -121,6 +121,11 @@ export default new Command({
       .setLabel("Our Repository")
       .setURL("https://boostify.breaddevv.cc/github");
 
+    const buyMeACoffee = new ButtonBuilder()
+      .setStyle(ButtonStyle.Link)
+      .setLabel("Buy Me A Coffee!")
+      .setURL("https://buymeacoffee.com/breaddevv");
+
     const topgg = new ButtonBuilder()
       .setStyle(ButtonStyle.Link)
       .setLabel("Support Us On Top.gg")
@@ -134,6 +139,7 @@ export default new Command({
       repo
     );
     const actionRow2 = new ActionRowBuilder<ButtonBuilder>().setComponents(
+      buyMeACoffee,
       topgg
     );
 
